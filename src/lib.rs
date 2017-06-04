@@ -1,11 +1,10 @@
-#![feature(test)]
-extern crate test;
+#![cfg_attr(asm, feature(asm))]
+
+mod black_box;
+
+pub use self::black_box::black_box;
 
 use std::time::{Instant, Duration};
-
-pub fn black_box<T>(x: T) -> T {
-    test::black_box(x)
-}
 
 pub struct Sample {
     name: &'static str,

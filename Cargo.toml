@@ -2,9 +2,13 @@
 name = "liar"
 version = "0.1.0"
 authors = ["Joe Ranweiler <josephkennethranweiler@gmail.com>"]
+build = "build.rs"
 
 [[bin]]
 name = "example"
 path = "example/example.rs"
 
 [dependencies]
+
+[build-dependencies]
+rustc_version = "0.2.1"
