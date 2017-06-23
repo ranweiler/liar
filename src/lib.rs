@@ -1,45 +1,31 @@
 #![cfg_attr(asm, feature(asm))]
 
 mod black_box;
+pub mod runner;
 
 pub use self::black_box::black_box;
 
-use std::time::{Instant, Duration};
-
-pub struct Sample {
-    name: &'static str,
-    dur: Duration,
-    count: u32,
-}
-
 pub struct Bencher {
     name: Option<&'static str>,
-    samples: Vec<Sample>,
+    runner: runner::Runner,
+    samples: Vec<runner::Samples>,
 }
 
 impl Bencher {
     pub fn new() -> Self {
         Bencher {
             name: None,
+            runner: runner::Runner::new(),
             samples: vec![],
         }
     }
 
     pub fn run<Target, Ret>(&mut self, mut target: Target)
         where Target: FnMut() -> Ret {
-        let count = 100_000_u32;
 
-        let now = Instant::now();
-        for _ in 0..count {
-            black_box(target());
-        }
-        let dur = now.elapsed();
-
-        self.samples.push(Sample {
-            name: self.name.unwrap(),
-            dur,
-            count,
-        });
+        let name = self.name.unwrap();
+        let target_samples = self.runner.run(name, &mut target);
+        self.samples.push(target_samples);
     }
 
     pub fn bench<T>(&mut self, name: &'static str, target: &mut T)
@@ -48,7 +34,7 @@ impl Bencher {
         target(self);
     }
 
-    pub fn samples(&self) -> &Vec<Sample> {
+    pub fn samples(&self) -> &Vec<runner::Samples> {
         &self.samples
     }
 }
@@ -60,11 +46,23 @@ impl Reporter {
         Reporter {}
     }
 
-    pub fn report(&self, samples: &Vec<Sample>) {
+    pub fn report(&self, samples: &Vec<runner::Samples>) {
+        fn stats(s: &runner::Samples) -> (f64, f64, f64) {
+            let total = s.data.iter().sum::<u64>() as f64;
+            let n = s.data.len() as f64;
+            let mean = total / n;
+            let var = s.data
+                .iter()
+                .map(|x| ((*x as f64) - mean).powi(2))
+                .sum::<f64>() / (n - 1.0);
+            let ssd = var.sqrt();
+            let ssd_perc = ssd / mean * 100.0;
+            (mean, ssd, ssd_perc)
+        }
+
         for s in samples {
-            let ns = s.dur.as_secs() * 1_000_000_000 + (s.dur.subsec_nanos() as u64);
-            let ns_per_iter = (ns as f64) / (s.count as f64);
-            println!("{:}:\t{:?}", s.name, ns_per_iter);
+            let (mean, ssd, ssd_perc) = stats(&s);
+            println!("[{:}]:\t{:} ± {:.3} ({:.3}%)", s.name, mean, ssd, ssd_perc);
         }
     }
 }
