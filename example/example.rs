@@ -44,6 +44,6 @@ fn main() {
     b.bench("ack", &mut ack);
     b.bench("ack_black_box", &mut ack_black_box);
 
-    let r = liar::Reporter::new();
+    let r = liar::reporter::Reporter::new();
     r.report(&b.samples());
 }
