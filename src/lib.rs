@@ -8,15 +8,15 @@ pub use self::black_box::black_box;
 
 pub struct Bencher {
     name: Option<&'static str>,
-    runner: runner::Runner,
-    samples: Vec<runner::Samples>,
+    runner: runner::default::Runner,
+    samples: Vec<runner::default::Samples>,
 }
 
 impl Bencher {
     pub fn new() -> Self {
         Bencher {
             name: None,
-            runner: runner::Runner::new(),
+            runner: runner::default::Runner::new(),
             samples: vec![],
         }
     }
@@ -35,7 +35,7 @@ impl Bencher {
         target(self);
     }
 
-    pub fn samples(&self) -> &Vec<runner::Samples> {
+    pub fn samples(&self) -> &Vec<runner::default::Samples> {
         &self.samples
     }
 }
