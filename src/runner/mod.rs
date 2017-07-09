@@ -3,6 +3,11 @@ use std::time::{Instant, Duration};
 use black_box::black_box;
 
 
+fn ns_from_dur(dur: &Duration) -> u64 {
+    let ns_per_sec = 1_000_000_000_u64;
+    (dur.as_secs() as u64) * ns_per_sec + (dur.subsec_nanos() as u64)
+}
+
 pub const SAMPLE_SIZE: usize = 100;
 
 pub struct Samples {
@@ -11,11 +16,6 @@ pub struct Samples {
 }
 
 pub struct Runner {}
-
-fn ns_from_dur(dur: &Duration) -> u64 {
-    let ns_per_sec = 1_000_000_000_u64;
-    (dur.as_secs() as u64) * ns_per_sec + (dur.subsec_nanos() as u64)
-}
 
 impl Runner {
     pub fn new() -> Self {
