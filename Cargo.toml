@@ -1,7 +1,14 @@
 [package]
+authors = ["Joe Ranweiler <josephkennethranweiler@gmail.com>"]
+description = "Flexible, stand-alone benchmarking"
+keywords = ["benchmark", "perf", "testing"]
 name = "liar"
 version = "0.1.0"
-authors = ["Joe Ranweiler <josephkennethranweiler@gmail.com>"]
+
+license-file = "LICENSE"
+readme = "README.md"
+repository = "https://github.com/ranweiler/liar"
+
 build = "build.rs"
 
 [dependencies]
