@@ -1,10 +1,7 @@
 [package]
-name = "liar"
+name = "basic"
 version = "0.1.0"
 authors = ["Joe Ranweiler <josephkennethranweiler@gmail.com>"]
-build = "build.rs"
 
 [dependencies]
-
-[build-dependencies]
-rustc_version = "0.2.1"
+liar = { path = "../.." }
