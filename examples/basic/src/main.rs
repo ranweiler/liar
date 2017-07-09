@@ -1,6 +1,7 @@
 extern crate liar;
 
-use liar::{black_box, Bencher};
+use liar::black_box;
+use liar::bencher::Bencher;
 
 
 mod acker {
@@ -37,7 +38,7 @@ fn ack_black_box(b: &mut Bencher) {
 }
 
 fn main() {
-    let mut b = liar::Bencher::new();
+    let mut b = liar::bencher::Bencher::new();
 
     b.bench("nop", &mut nop);
     b.bench("nop_black_box", &mut nop_black_box);
