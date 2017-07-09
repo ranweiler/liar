@@ -2,6 +2,7 @@ extern crate liar;
 
 use liar::black_box;
 use liar::bencher::default::Bencher;
+use liar::reporter::default::Reporter;
 
 
 mod acker {
@@ -45,6 +46,6 @@ fn main() {
     b.bench("ack", &mut ack);
     b.bench("ack_black_box", &mut ack_black_box);
 
-    let r = liar::reporter::Reporter::new();
+    let r = Reporter::new();
     r.report(&b.samples());
 }
