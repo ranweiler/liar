@@ -1,4 +1,5 @@
 #![cfg_attr(asm, feature(asm))]
+#![cfg_attr(not(feature = "std"), no_std)]
 
 mod black_box;
 pub mod bencher;
