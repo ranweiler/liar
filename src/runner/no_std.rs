@@ -1,5 +1,3 @@
-use std::time::{Instant, Duration};
-
 use black_box::black_box;
 
 
@@ -10,16 +8,17 @@ pub struct Samples {
     pub data: [u64; SAMPLE_SIZE],
 }
 
-pub struct Runner {}
+pub type TimerFn<T> = fn() -> T;
+pub type DiffFn<T> = fn(&T, &T) -> u64;
 
-fn ns_from_dur(dur: &Duration) -> u64 {
-    let ns_per_sec = 1_000_000_000_u64;
-    (dur.as_secs() as u64) * ns_per_sec + (dur.subsec_nanos() as u64)
+pub struct Runner<T> {
+    timer: TimerFn<T>,
+    diff: DiffFn<T>,
 }
 
-impl Runner {
-    pub fn new() -> Self {
-        Runner {}
+impl<'a, T> Runner<T> {
+    pub fn new(timer: TimerFn<T>, diff: DiffFn<T>) -> Self {
+        Runner { timer, diff }
     }
 
     pub fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Samples
@@ -39,12 +38,14 @@ impl Runner {
 
         let count = 10_000_u64;
 
-        let now = Instant::now();
+        let start = (self.timer)();
+
         for _ in 0..count {
             black_box(target());
         }
-        let dur = now.elapsed();
 
-        ns_from_dur(&dur) / count
+        let end = (self.timer)();
+
+        (self.diff)(&start, &end) / count
     }
 }
