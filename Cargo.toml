@@ -1,9 +1,9 @@
 [package]
 authors = ["Joe Ranweiler <josephkennethranweiler@gmail.com>"]
-description = "Flexible, stand-alone benchmarking"
-keywords = ["benchmark", "perf", "testing"]
+description = "Flexible, stand-alone benchmarking."
+keywords = ["benchmark", "no_std", "perf", "testing"]
 name = "liar"
-version = "0.1.0"
+version = "0.2.0"
 
 license-file = "LICENSE"
 readme = "README.md"
