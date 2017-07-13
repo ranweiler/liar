@@ -2,8 +2,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 mod black_box;
-pub mod bencher;
-pub mod reporter;
-pub mod runner;
+
+#[cfg(feature = "std")] pub mod bencher;
+#[cfg(feature = "std")] pub mod reporter;
+#[cfg(feature = "std")] pub mod runner;
+
+pub mod no_std;
 
 pub use self::black_box::black_box;

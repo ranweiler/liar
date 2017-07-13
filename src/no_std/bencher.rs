@@ -1,4 +1,4 @@
-use runner::no_std::{DiffFn, Runner, Samples, TimerFn};
+use no_std::runner::{DiffFn, Runner, Samples, TimerFn};
 
 
 pub struct Bencher<'a, T> {

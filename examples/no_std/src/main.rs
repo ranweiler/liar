@@ -4,7 +4,7 @@
 extern crate libc;
 extern crate liar;
 
-use liar::bencher::no_std::Bencher;
+use liar::no_std::bencher::Bencher;
 
 use core::fmt::{self, Write};
 
