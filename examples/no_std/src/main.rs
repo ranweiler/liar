@@ -1,6 +1,8 @@
+#![feature(compiler_builtins_lib)]
 #![feature(lang_items)]
 #![feature(start)]
 #![no_std]
+extern crate compiler_builtins;
 extern crate libc;
 extern crate liar;
 
@@ -11,6 +13,7 @@ use core::fmt::{self, Write};
 
 // From: https://lifthrasiir.github.io/rustlog/why-is-a-rust-executable-large.html
 struct Stdout;
+
 impl Write for Stdout {
     fn write_str(&mut self, s: &str) -> fmt::Result {
         let ret = unsafe {
