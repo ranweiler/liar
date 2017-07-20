@@ -8,27 +8,31 @@ fn ns_from_dur(dur: &Duration) -> u64 {
     (dur.as_secs() as u64) * ns_per_sec + (dur.subsec_nanos() as u64)
 }
 
-pub const SAMPLE_SIZE: usize = 100;
+pub const DEFAULT_SAMPLE_SIZE: usize = 100;
 
 pub struct Samples {
     pub name: &'static str,
-    pub data: [u64; SAMPLE_SIZE],
+    pub data: Vec<u64>,
 }
 
-pub struct Runner {}
+pub struct Runner {
+    sample_size: usize,
+}
 
 impl Runner {
     pub fn new() -> Self {
-        Runner {}
+        Runner {
+            sample_size: DEFAULT_SAMPLE_SIZE,
+        }
     }
 
     pub fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Samples
         where Target: FnMut() -> Ret {
 
-        let mut data = [0_u64; SAMPLE_SIZE];
+        let mut data = Vec::with_capacity(self.sample_size);
 
-        for ix in 0..SAMPLE_SIZE {
-            data[ix] = self.run_loop(target);
+        for _ in 0..self.sample_size {
+            data.push(self.run_loop(target));
         }
 
         Samples { name, data }
