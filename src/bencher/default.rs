@@ -8,9 +8,14 @@ pub struct Bencher {
 
 impl Bencher {
     pub fn new() -> Self {
+        let runner = runner::fixed::FixedRunner::new();
+        Self::from_runner(runner)
+    }
+
+    pub fn from_runner(runner: runner::fixed::FixedRunner) -> Self {
         Bencher {
             name: None,
-            runner: runner::fixed::FixedRunner::new(),
+            runner,
             samples: vec![],
         }
     }
