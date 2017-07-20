@@ -16,14 +16,14 @@ pub struct Samples {
     pub data: Vec<u64>,
 }
 
-pub struct Runner {
+pub struct FixedRunner {
     rounds: usize,
     sample_size: usize,
 }
 
-impl Runner {
+impl FixedRunner {
     pub fn new() -> Self {
-        Runner {
+        FixedRunner {
             rounds: DEFAULT_ROUNDS,
             sample_size: DEFAULT_SAMPLE_SIZE,
         }
