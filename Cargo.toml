@@ -5,6 +5,7 @@ keywords = ["benchmark", "no_std", "perf", "testing"]
 name = "liar"
 version = "0.3.0"
 
+license = "ISC"
 license-file = "LICENSE"
 readme = "README.md"
 repository = "https://github.com/ranweiler/liar"
