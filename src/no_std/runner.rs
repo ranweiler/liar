@@ -26,8 +26,8 @@ impl<'a, T> Runner<T> {
 
         let mut data = [0_u64; SAMPLE_SIZE];
 
-        for ix in 0..SAMPLE_SIZE {
-            data[ix] = self.run_loop(target);
+        for i in 0..SAMPLE_SIZE {
+            data[i] = self.run_loop(target);
         }
 
         Samples { name, data }
