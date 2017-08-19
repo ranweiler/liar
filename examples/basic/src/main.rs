@@ -4,7 +4,6 @@ use liar::black_box;
 use liar::bencher::default::Bencher;
 use liar::reporter::default::Reporter;
 
-
 mod acker {
     pub fn mann(m: usize, n: usize) -> usize {
         match m {
@@ -17,6 +16,7 @@ mod acker {
     }
 
 }
+
 
 fn nop(b: &mut Bencher) {
     b.run(|| {});
