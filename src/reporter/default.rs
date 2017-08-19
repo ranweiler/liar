@@ -1,4 +1,4 @@
-use runner::default::Samples;
+use runner::fixed::Samples;
 
 pub struct Reporter {}
 

@@ -1,7 +1,7 @@
 [package]
 name = "no_std"
 version = "0.1.0"
-authors = ["Joe Ranweiler <josephkennethranweiler@gmail.com>"]
+authors = ["Joe Ranweiler <joe@lemma.co>"]
 
 [dependencies]
 libc = { version = "0.2.11", default-features = false }

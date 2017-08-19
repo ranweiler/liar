@@ -2,15 +2,20 @@ use runner;
 
 pub struct Bencher {
     name: Option<&'static str>,
-    runner: runner::default::Runner,
-    samples: Vec<runner::default::Samples>,
+    runner: runner::fixed::FixedRunner,
+    samples: Vec<runner::fixed::Samples>,
 }
 
 impl Bencher {
     pub fn new() -> Self {
+        let runner = runner::fixed::FixedRunner::new();
+        Self::from_runner(runner)
+    }
+
+    pub fn from_runner(runner: runner::fixed::FixedRunner) -> Self {
         Bencher {
             name: None,
-            runner: runner::default::Runner::new(),
+            runner,
             samples: vec![],
         }
     }
@@ -29,7 +34,7 @@ impl Bencher {
         target(self);
     }
 
-    pub fn samples(&self) -> &Vec<runner::default::Samples> {
+    pub fn samples(&self) -> &Vec<runner::fixed::Samples> {
         &self.samples
     }
 }

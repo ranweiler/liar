@@ -1,5 +1,5 @@
 [package]
-authors = ["Joe Ranweiler <josephkennethranweiler@gmail.com>"]
+authors = ["Joe Ranweiler <joe@lemma.co>"]
 description = "Flexible, stand-alone benchmarking."
 keywords = ["benchmark", "no_std", "perf", "testing"]
 name = "liar"

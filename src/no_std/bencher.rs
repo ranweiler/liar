@@ -1,43 +1,45 @@
 use no_std::runner::{DiffFn, Runner, Samples, TimerFn};
 
 
-pub struct Bencher<'a, T> {
-    name: Option<&'static str>,
+pub struct Bencher<'d, T> {
+    data: &'d mut [u64],
     runner: Runner<T>,
-    count: usize,
-    samples: &'a mut [Option<Samples>],
 }
 
-impl<'a, T> Bencher<'a, T> {
-    pub fn new(samples: &'a mut [Option<Samples>],
-               timer: TimerFn<T>,
-               diff: DiffFn<T>,
+impl<'d, T> Bencher<'d, T> {
+    pub fn new(
+        data: &'d mut [u64],
+        timer: TimerFn<T>,
+        diff: DiffFn<T>,
+        rounds: usize,
     ) -> Self {
+
         Bencher {
-            name: None,
-            runner: Runner::new(timer, diff),
-            count: 0,
-            samples,
+            data,
+            runner: Runner::new(rounds, timer, diff),
         }
     }
 
     pub fn run<Target, Ret>(&mut self, mut target: Target)
         where Target: FnMut() -> Ret {
 
-        let name = self.name.unwrap();
-        let target_samples = self.runner.run(name, &mut target);
-
-        self.samples[self.count] = Some(target_samples);
-        self.count += 1;
+        self.runner.run(&mut target, self.data);
     }
 
-    pub fn bench<Target>(&mut self, name: &'static str, target: &mut Target)
+    pub fn bench<'s, Target>(
+        &mut self,
+        name: &'static str,
+        target: &mut Target,
+        data: &'s mut [u64],
+    ) -> Samples<'s>
         where Target: FnMut(&mut Bencher<T>) {
-        self.name = Some(name);
-        target(self);
-    }
 
-    pub fn samples(&self) -> &[Option<Samples>] {
-        &self.samples[..self.count]
+        target(self);
+
+        for i in 0..self.data.len() {
+            data[i] = self.data[i];
+        }
+
+        Samples { name, data }
     }
 }
