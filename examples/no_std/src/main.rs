@@ -7,6 +7,7 @@ extern crate libc;
 extern crate liar;
 
 use liar::no_std::bencher::Bencher;
+use liar::no_std::runner::Samples;
 
 use core::fmt::{self, Write};
 
@@ -75,29 +76,29 @@ fn diff(start: &u64, end: &u64) -> u64 {
     end - start
 }
 
+fn report(s: &Samples) {
+    let mut total = 0f64;
+    for i in 0..s.data.len() {
+        total += s.data[i] as f64;
+    }
+    let n = s.data.len() as f64;
+    let avg = total / n;
+
+    writeln!(Stdout, "[{}]\t{}", s.name, avg).ok();
+}
+
+const SAMPLE_SIZE: usize = 100;
+
 // Entry point for this program
 #[start]
 fn start(_argc: isize, _argv: *const *const u8) -> isize {
-    let mut samples = [None, None, None];
-    let mut b = Bencher::new(&mut samples, time, diff);
+    let mut data = [0u64; SAMPLE_SIZE];
+    let mut b = Bencher::new(&mut data, time, diff);
 
-
-    b.bench("nop", &mut nop);
-    b.bench("zeroize", &mut zeroize);
-    b.bench("ack", &mut ack);
-
-    for s in b.samples() {
-        let s = s.as_ref().unwrap();
-
-        let mut total = 0f64;
-        for i in 0..s.data.len() {
-            total += s.data[i] as f64;
-        }
-        let n = s.data.len() as f64;
-        let avg = total / n;
-
-        writeln!(Stdout, "[{}]\t{}", s.name, avg).ok();
-    }
+    let mut out = [0u64; SAMPLE_SIZE];
+    report(&b.bench("nop", &mut nop, &mut out));
+    report(&b.bench("zeroize", &mut zeroize, &mut out));
+    report(&b.bench("ack", &mut ack, &mut out));
 
     0
 }
