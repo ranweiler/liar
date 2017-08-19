@@ -7,10 +7,16 @@ pub struct Bencher<'d, T> {
 }
 
 impl<'d, T> Bencher<'d, T> {
-    pub fn new(data: &'d mut [u64], timer: TimerFn<T>, diff: DiffFn<T>) -> Self {
+    pub fn new(
+        data: &'d mut [u64],
+        timer: TimerFn<T>,
+        diff: DiffFn<T>,
+        rounds: usize,
+    ) -> Self {
+
         Bencher {
             data,
-            runner: Runner::new(timer, diff),
+            runner: Runner::new(rounds, timer, diff),
         }
     }
 

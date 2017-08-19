@@ -88,12 +88,13 @@ fn report(s: &Samples) {
 }
 
 const SAMPLE_SIZE: usize = 100;
+const ROUNDS: usize = 1_000;
 
 // Entry point for this program
 #[start]
 fn start(_argc: isize, _argv: *const *const u8) -> isize {
     let mut data = [0u64; SAMPLE_SIZE];
-    let mut b = Bencher::new(&mut data, time, diff);
+    let mut b = Bencher::new(&mut data, time, diff, ROUNDS);
 
     let mut out = [0u64; SAMPLE_SIZE];
     report(&b.bench("nop", &mut nop, &mut out));
