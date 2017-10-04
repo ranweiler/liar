@@ -1,9 +1,10 @@
+use ::Sample;
 use runner::fixed;
 
 pub struct Bencher {
     name: Option<&'static str>,
     runner: fixed::FixedRunner,
-    samples: Vec<fixed::Sample<u64>>,
+    samples: Vec<Sample<u64>>,
 }
 
 impl Bencher {
@@ -38,7 +39,7 @@ impl Bencher {
         target(self);
     }
 
-    pub fn samples(&self) -> &Vec<fixed::Sample<u64>> {
+    pub fn samples(&self) -> &Vec<Sample<u64>> {
         &self.samples
     }
 }

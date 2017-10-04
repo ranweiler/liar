@@ -1,5 +1,6 @@
 use std::time::{Instant, Duration};
 
+use ::Sample;
 use black_box::black_box;
 
 
@@ -10,11 +11,6 @@ fn ns_from_dur(dur: &Duration) -> u64 {
 
 pub const DEFAULT_ROUND_SIZE: usize = 10_000;
 pub const DEFAULT_SAMPLE_SIZE: usize = 100;
-
-pub struct Sample<T> {
-    pub name: &'static str,
-    pub data: Vec<T>,
-}
 
 pub struct FixedRunner {
     round_size: usize,

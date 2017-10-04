@@ -1,4 +1,4 @@
-use runner::fixed::Sample;
+use ::Sample;
 
 pub struct Reporter {}
 

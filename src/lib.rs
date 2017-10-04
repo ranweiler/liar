@@ -10,3 +10,9 @@ mod black_box;
 pub mod no_std;
 
 pub use self::black_box::black_box;
+
+#[cfg(feature = "std")]
+pub struct Sample<T> {
+    pub name: &'static str,
+    pub data: Vec<T>,
+}
