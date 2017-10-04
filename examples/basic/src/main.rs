@@ -1,3 +1,4 @@
+#[macro_use]
 extern crate liar;
 
 use liar::black_box;
@@ -18,25 +19,25 @@ mod acker {
 }
 
 
-fn nop<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
+bench!(nop, b, {
     b.run(|| {});
-}
+});
 
-fn nop_black_box<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
+bench!(nop_black_box, b, {
     b.run(|| (black_box(3), black_box(2)));
-}
+});
 
-fn ack<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
+bench!(ack, b, {
     b.run(|| {
         acker::mann(3, 2)
     });
-}
+});
 
-fn ack_black_box<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
+bench!(ack_black_box, b, {
     b.run(|| {
         acker::mann(black_box(3), black_box(2))
     });
-}
+});
 
 fn main() {
     use liar::reporter::Reporter;
