@@ -8,7 +8,7 @@ fn ns_from_dur(dur: &Duration) -> u64 {
     (dur.as_secs() as u64) * ns_per_sec + (dur.subsec_nanos() as u64)
 }
 
-const DEFAULT_ROUNDS: usize = 10_000;
+pub const DEFAULT_ROUNDS: usize = 10_000;
 pub const DEFAULT_SAMPLE_SIZE: usize = 100;
 
 pub struct Samples {
@@ -22,10 +22,10 @@ pub struct FixedRunner {
 }
 
 impl FixedRunner {
-    pub fn new() -> Self {
+    pub fn new(rounds: usize, sample_size: usize) -> Self {
         FixedRunner {
-            rounds: DEFAULT_ROUNDS,
-            sample_size: DEFAULT_SAMPLE_SIZE,
+            rounds,
+            sample_size,
         }
     }
 
