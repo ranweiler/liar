@@ -11,9 +11,9 @@ fn ns_from_dur(dur: &Duration) -> u64 {
 pub const DEFAULT_ROUND_SIZE: usize = 10_000;
 pub const DEFAULT_SAMPLE_SIZE: usize = 100;
 
-pub struct Sample {
+pub struct Sample<T> {
     pub name: &'static str,
-    pub data: Vec<u64>,
+    pub data: Vec<T>,
 }
 
 pub struct FixedRunner {
@@ -29,7 +29,7 @@ impl FixedRunner {
         }
     }
 
-    pub fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample
+    pub fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample<u64>
         where Target: FnMut() -> Ret {
 
         let mut data = Vec::with_capacity(self.sample_size);

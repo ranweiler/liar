@@ -3,7 +3,7 @@ use runner::fixed;
 pub struct Bencher {
     name: Option<&'static str>,
     runner: fixed::FixedRunner,
-    samples: Vec<fixed::Sample>,
+    samples: Vec<fixed::Sample<u64>>,
 }
 
 impl Bencher {
@@ -38,7 +38,7 @@ impl Bencher {
         target(self);
     }
 
-    pub fn samples(&self) -> &Vec<fixed::Sample> {
+    pub fn samples(&self) -> &Vec<fixed::Sample<u64>> {
         &self.samples
     }
 }
