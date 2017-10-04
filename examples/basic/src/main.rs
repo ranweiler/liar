@@ -1,8 +1,8 @@
 extern crate liar;
 
 use liar::black_box;
-use liar::bencher::default::Bencher;
-use liar::reporter::default::Reporter;
+use liar::bencher::Bencher;
+use liar::reporter::Reporter;
 
 mod acker {
     pub fn mann(m: usize, n: usize) -> usize {
