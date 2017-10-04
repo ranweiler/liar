@@ -1,7 +1,7 @@
 use black_box::black_box;
 
 
-pub struct Samples<'d> {
+pub struct Sample<'d> {
     pub name: &'static str,
     pub data: &'d [u64],
 }

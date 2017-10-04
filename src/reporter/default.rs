@@ -1,4 +1,4 @@
-use runner::fixed::Samples;
+use runner::fixed::Sample;
 
 pub struct Reporter {}
 
@@ -7,8 +7,8 @@ impl Reporter {
         Reporter {}
     }
 
-    pub fn report(&self, samples: &Vec<Samples>) {
-        fn stats(s: &Samples) -> (f64, f64, f64) {
+    pub fn report(&self, samples: &Vec<Sample>) {
+        fn stats(s: &Sample) -> (f64, f64, f64) {
             let total = s.data.iter().sum::<u64>() as f64;
             let n = s.data.len() as f64;
             let mean = total / n;

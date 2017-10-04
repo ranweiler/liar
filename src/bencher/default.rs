@@ -3,7 +3,7 @@ use runner::fixed;
 pub struct Bencher {
     name: Option<&'static str>,
     runner: fixed::FixedRunner,
-    samples: Vec<fixed::Samples>,
+    samples: Vec<fixed::Sample>,
 }
 
 impl Bencher {
@@ -28,8 +28,8 @@ impl Bencher {
         where Target: FnMut() -> Ret {
 
         let name = self.name.unwrap();
-        let target_samples = self.runner.run(name, &mut target);
-        self.samples.push(target_samples);
+        let sample = self.runner.run(name, &mut target);
+        self.samples.push(sample);
     }
 
     pub fn bench<T>(&mut self, name: &'static str, target: &mut T)
@@ -38,7 +38,7 @@ impl Bencher {
         target(self);
     }
 
-    pub fn samples(&self) -> &Vec<fixed::Samples> {
+    pub fn samples(&self) -> &Vec<fixed::Sample> {
         &self.samples
     }
 }
