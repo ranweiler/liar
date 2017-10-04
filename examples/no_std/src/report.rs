@@ -2,7 +2,7 @@ use core::fmt::{self, Write};
 
 use libc;
 
-use liar::no_std::runner::Samples;
+use liar::no_std::runner::Sample;
 
 
 // From: https://lifthrasiir.github.io/rustlog/why-is-a-rust-executable-large.html
@@ -22,7 +22,7 @@ impl Write for Stdout {
     }
 }
 
-pub fn report(s: &Samples) {
+pub fn report(s: &Sample) {
     let mut total = 0f64;
     for i in 0..s.data.len() {
         total += s.data[i] as f64;

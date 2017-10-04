@@ -1,4 +1,4 @@
-use no_std::runner::{DiffFn, Runner, Samples, TimerFn};
+use no_std::runner::{DiffFn, Runner, Sample, TimerFn};
 
 
 pub struct Bencher<'d, T> {
@@ -11,12 +11,12 @@ impl<'d, T> Bencher<'d, T> {
         data: &'d mut [u64],
         timer: TimerFn<T>,
         diff: DiffFn<T>,
-        rounds: usize,
+        round_size: usize,
     ) -> Self {
 
         Bencher {
             data,
-            runner: Runner::new(rounds, timer, diff),
+            runner: Runner::new(round_size, timer, diff),
         }
     }
 
@@ -31,7 +31,7 @@ impl<'d, T> Bencher<'d, T> {
         name: &'static str,
         target: &mut Target,
         data: &'s mut [u64],
-    ) -> Samples<'s>
+    ) -> Sample<'s>
         where Target: FnMut(&mut Bencher<T>) {
 
         target(self);
@@ -40,6 +40,6 @@ impl<'d, T> Bencher<'d, T> {
             data[i] = self.data[i];
         }
 
-        Samples { name, data }
+        Sample { name, data }
     }
 }
