@@ -18,25 +18,26 @@ mod acker {
     }
 }
 
-
-bench!(nop, b, {
+// Manual benchmark definition.
+fn nop<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
     b.run(|| {});
-});
+}
 
+// Benchmark definition with macro, allowing custom setup.
 bench!(nop_black_box, b, {
-    b.run(|| (black_box(3), black_box(2)));
+    let m = 3;
+    let n = 2;
+
+    b.run(|| (black_box(m), black_box(n)));
 });
 
-bench!(ack, b, {
-    b.run(|| {
-        acker::mann(3, 2)
-    });
+// Succinct benchmark definition when no custom setup is needed.
+bench!(ack, {
+    acker::mann(black_box(3), black_box(2))
 });
 
-bench!(ack_black_box, b, {
-    b.run(|| {
-        acker::mann(black_box(3), black_box(2))
-    });
+bench!(ack_black_box, {
+    acker::mann(black_box(3), black_box(2))
 });
 
 fn main() {
