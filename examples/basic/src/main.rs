@@ -2,7 +2,8 @@ extern crate liar;
 
 use liar::black_box;
 use liar::bencher::Bencher;
-use liar::reporter::Reporter;
+use liar::runner::Runner;
+
 
 mod acker {
     pub fn mann(m: usize, n: usize) -> usize {
@@ -14,32 +15,35 @@ mod acker {
             }
         }
     }
-
 }
 
 
-fn nop(b: &mut Bencher) {
+fn nop<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
     b.run(|| {});
 }
 
-fn nop_black_box(b: &mut Bencher) {
+fn nop_black_box<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
     b.run(|| (black_box(3), black_box(2)));
 }
 
-fn ack(b: &mut Bencher) {
+fn ack<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
     b.run(|| {
         acker::mann(3, 2)
     });
 }
 
-fn ack_black_box(b: &mut Bencher) {
+fn ack_black_box<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
     b.run(|| {
         acker::mann(black_box(3), black_box(2))
     });
 }
 
 fn main() {
-    let mut b = Bencher::new();
+    use liar::reporter::Reporter;
+    use liar::runner::fixed;
+
+    let r = fixed::FixedRunner::new(fixed::DEFAULT_ROUND_SIZE, fixed::DEFAULT_SAMPLE_SIZE);
+    let mut b = Bencher::new(r);
 
     b.bench("nop", &mut nop);
     b.bench("nop_black_box", &mut nop_black_box);

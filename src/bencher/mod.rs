@@ -1,23 +1,15 @@
 use ::Sample;
-use runner::fixed;
+use runner::Runner;
 
-pub struct Bencher {
+
+pub struct Bencher<R: Runner<S>, S> {
     name: Option<&'static str>,
-    runner: fixed::FixedRunner,
-    samples: Vec<Sample<u64>>,
+    runner: R,
+    samples: Vec<Sample<S>>,
 }
 
-impl Bencher {
-    pub fn new() -> Self {
-        let runner = fixed::FixedRunner::new(
-            fixed::DEFAULT_ROUND_SIZE,
-            fixed::DEFAULT_SAMPLE_SIZE,
-        );
-
-        Self::from_runner(runner)
-    }
-
-    pub fn from_runner(runner: fixed::FixedRunner) -> Self {
+impl<R: Runner<S>, S> Bencher<R, S> {
+    pub fn new(runner: R) -> Self where {
         Bencher {
             name: None,
             runner,
@@ -34,12 +26,12 @@ impl Bencher {
     }
 
     pub fn bench<T>(&mut self, name: &'static str, target: &mut T)
-        where T: FnMut(&mut Bencher) {
+        where T: FnMut(&mut Bencher<R, S>) {
         self.name = Some(name);
         target(self);
     }
 
-    pub fn samples(&self) -> &Vec<Sample<u64>> {
+    pub fn samples(&self) -> &Vec<Sample<S>> {
         &self.samples
     }
 }
