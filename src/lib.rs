@@ -19,9 +19,14 @@ pub struct Sample<T> {
 
 #[macro_export]
 macro_rules! bench {
+    ($name:ident, $body:expr) => {
+        fn $name<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
+            b.run(|| $body);
+        }
+    };
     ($name:ident, $b:ident, $body:expr) => {
         fn $name<R: Runner<S>, S>($b: &mut Bencher<R, S>) {
             $body
         }
-    }
+    };
 }
