@@ -9,7 +9,7 @@ pub struct Bencher {
 impl Bencher {
     pub fn new() -> Self {
         let runner = fixed::FixedRunner::new(
-            fixed::DEFAULT_ROUNDS,
+            fixed::DEFAULT_ROUND_SIZE,
             fixed::DEFAULT_SAMPLE_SIZE,
         );
 

@@ -11,12 +11,12 @@ impl<'d, T> Bencher<'d, T> {
         data: &'d mut [u64],
         timer: TimerFn<T>,
         diff: DiffFn<T>,
-        rounds: usize,
+        round_size: usize,
     ) -> Self {
 
         Bencher {
             data,
-            runner: Runner::new(rounds, timer, diff),
+            runner: Runner::new(round_size, timer, diff),
         }
     }
 

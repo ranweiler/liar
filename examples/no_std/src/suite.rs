@@ -39,11 +39,11 @@ fn ack(b: &mut Bencher<u64>) {
 }
 
 const SAMPLE_SIZE: usize = 100;
-const ROUNDS: usize = 1_000;
+const ROUND_SIZE: usize = 1_000;
 
 pub fn main() {
     let mut data = [0u64; SAMPLE_SIZE];
-    let mut b = Bencher::new(&mut data, time, diff, ROUNDS);
+    let mut b = Bencher::new(&mut data, time, diff, ROUND_SIZE);
 
     let mut out = [0u64; SAMPLE_SIZE];
     report(&b.bench("nop", &mut nop, &mut out));
