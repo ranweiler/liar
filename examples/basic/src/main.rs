@@ -47,10 +47,10 @@ fn main() {
     let r = fixed::FixedRunner::new(fixed::DEFAULT_ROUND_SIZE, fixed::DEFAULT_SAMPLE_SIZE);
     let mut b = Bencher::new(r);
 
-    b.bench("nop", &mut nop);
-    b.bench("nop_black_box", &mut nop_black_box);
-    b.bench("ack", &mut ack);
-    b.bench("ack_black_box", &mut ack_black_box);
+    add_bench!(b, nop);
+    add_bench!(b, nop_black_box);
+    add_bench!(b, ack);
+    add_bench!(b, ack_black_box);
 
     let r = Reporter::new();
     r.report(&b.samples());
