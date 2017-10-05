@@ -1,4 +1,5 @@
 pub mod fixed;
+pub mod linear;
 
 use std::time::Duration;
 
