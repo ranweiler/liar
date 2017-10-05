@@ -1,14 +1,9 @@
-use std::time::{Instant, Duration};
+use std::time::Instant;
 
 use ::Sample;
-use runner::Runner;
+use runner::{Runner, to_ns};
 use black_box::black_box;
 
-
-fn ns_from_dur(dur: &Duration) -> u64 {
-    let ns_per_sec = 1_000_000_000_u64;
-    (dur.as_secs() as u64) * ns_per_sec + (dur.subsec_nanos() as u64)
-}
 
 pub const DEFAULT_ROUND_SIZE: usize = 10_000;
 pub const DEFAULT_SAMPLE_SIZE: usize = 100;
@@ -35,7 +30,7 @@ impl FixedRunner {
         }
         let dur = now.elapsed();
 
-        ns_from_dur(&dur) / (round_size as u64)
+        to_ns(&dur) / (round_size as u64)
     }
 }
 
