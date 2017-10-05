@@ -1,3 +1,4 @@
+pub mod line;
 
 use ::Sample;
 
