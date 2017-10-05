@@ -1,14 +1,9 @@
 use std::time::Instant;
 
 use ::Sample;
-use runner::{Runner, to_ns};
+use runner::{Round, Runner, to_ns};
 use black_box::black_box;
 
-
-pub struct Round {
-    pub ns: u64,
-    pub size: usize,
-}
 
 pub const DEFAULT_ROUND_SIZE_START: usize = 1_000;
 pub const DEFAULT_ROUND_SIZE_STEP: usize = 100;
