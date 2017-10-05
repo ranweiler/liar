@@ -1,8 +1,10 @@
+#[macro_use]
 extern crate liar;
 
 use liar::black_box;
 use liar::bencher::Bencher;
-use liar::reporter::Reporter;
+use liar::runner::Runner;
+
 
 mod acker {
     pub fn mann(m: usize, n: usize) -> usize {
@@ -14,37 +16,41 @@ mod acker {
             }
         }
     }
-
 }
 
-
-fn nop(b: &mut Bencher) {
+// Manual benchmark definition.
+fn nop<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
     b.run(|| {});
 }
 
-fn nop_black_box(b: &mut Bencher) {
-    b.run(|| (black_box(3), black_box(2)));
-}
+// Benchmark definition with macro, allowing custom setup.
+bench!(nop_black_box, b, {
+    let m = 3;
+    let n = 2;
 
-fn ack(b: &mut Bencher) {
-    b.run(|| {
-        acker::mann(3, 2)
-    });
-}
+    b.run(|| (black_box(m), black_box(n)));
+});
 
-fn ack_black_box(b: &mut Bencher) {
-    b.run(|| {
-        acker::mann(black_box(3), black_box(2))
-    });
-}
+// Succinct benchmark definition when no custom setup is needed.
+bench!(ack, {
+    acker::mann(black_box(3), black_box(2))
+});
+
+bench!(ack_black_box, {
+    acker::mann(black_box(3), black_box(2))
+});
 
 fn main() {
-    let mut b = Bencher::new();
+    use liar::reporter::Reporter;
+    use liar::runner::fixed;
 
-    b.bench("nop", &mut nop);
-    b.bench("nop_black_box", &mut nop_black_box);
-    b.bench("ack", &mut ack);
-    b.bench("ack_black_box", &mut ack_black_box);
+    let r = fixed::FixedRunner::new(fixed::DEFAULT_ROUND_SIZE, fixed::DEFAULT_SAMPLE_SIZE);
+    let mut b = Bencher::new(r);
+
+    add_bench!(b, nop);
+    add_bench!(b, nop_black_box);
+    add_bench!(b, ack);
+    add_bench!(b, ack_black_box);
 
     let r = Reporter::new();
     r.report(&b.samples());

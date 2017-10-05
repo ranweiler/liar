@@ -1,6 +1,7 @@
 use std::time::{Instant, Duration};
 
 use ::Sample;
+use runner::Runner;
 use black_box::black_box;
 
 
@@ -25,19 +26,6 @@ impl FixedRunner {
         }
     }
 
-    pub fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample<u64>
-        where Target: FnMut() -> Ret {
-
-        let mut data = Vec::with_capacity(self.sample_size);
-
-        let round_size = self.round_size;  // For borrowck.
-        for _ in 0..self.sample_size {
-            data.push(self.run_round(round_size, target))
-        }
-
-        Sample { name, data }
-    }
-
     fn run_round<Target, Ret>(&mut self, round_size: usize, target: &mut Target) -> u64
         where Target: FnMut() -> Ret {
 
@@ -48,5 +36,20 @@ impl FixedRunner {
         let dur = now.elapsed();
 
         ns_from_dur(&dur) / (round_size as u64)
+    }
+}
+
+impl Runner<u64> for FixedRunner {
+    fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample<u64>
+        where Target: FnMut() -> Ret {
+
+        let mut data = Vec::with_capacity(self.sample_size);
+
+        let round_size = self.round_size;  // For borrowck.
+        for _ in 0..self.sample_size {
+            data.push(self.run_round(round_size, target))
+        }
+
+        Sample { name, data }
     }
 }
