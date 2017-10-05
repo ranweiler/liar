@@ -30,3 +30,10 @@ macro_rules! bench {
         }
     };
 }
+
+#[macro_export]
+macro_rules! add_bench {
+    ($b:ident, $name:ident) => {
+        $b.bench(stringify!($name), &mut $name);
+    }
+}
