@@ -41,7 +41,6 @@ bench!(ack_black_box, {
 });
 
 fn main() {
-    use liar::reporter::Reporter;
     use liar::runner::fixed;
 
     let r = fixed::FixedRunner::new(fixed::DEFAULT_ROUND_SIZE, fixed::DEFAULT_SAMPLE_SIZE);
@@ -52,6 +51,9 @@ fn main() {
     add_bench!(b, ack);
     add_bench!(b, ack_black_box);
 
-    let r = Reporter::new();
-    r.report(&b.samples());
+    for s in b.samples() {
+        for d in &s.data {
+            println!("{}\t{}", s.name, d);
+        }
+    }
 }
