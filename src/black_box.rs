@@ -12,7 +12,6 @@
 // dual-licensed, and in each case we incorporate the relevant code
 // using the MIT License option.
 
-
 /// A function that is opaque to the optimizer, to allow benchmarks to
 /// pretend to use outputs to assist in avoiding dead-code elimination.
 ///

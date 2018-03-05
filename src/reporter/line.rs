@@ -1,9 +1,8 @@
 use std::fmt::Debug;
 
-use ::Sample;
+use Sample;
 use reporter::Reporter;
 use runner::Round;
-
 
 pub struct LineReporter {
     delim: &'static str,

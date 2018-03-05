@@ -1,9 +1,8 @@
 use std::time::Instant;
 
-use ::Sample;
-use runner::{Round, Runner, to_ns};
+use Sample;
+use runner::{to_ns, Round, Runnable, Runner};
 use black_box::black_box;
-
 
 pub const DEFAULT_ROUND_SIZE_START: usize = 1_000;
 pub const DEFAULT_ROUND_SIZE_STEP: usize = 100;
@@ -16,11 +15,7 @@ pub struct LinearRunner {
 }
 
 impl LinearRunner {
-    pub fn new(
-        round_size_start: usize,
-        round_size_step: usize,
-        sample_size: usize,
-    ) -> Self {
+    pub fn new(round_size_start: usize, round_size_step: usize, sample_size: usize) -> Self {
         LinearRunner {
             round_size_start,
             round_size_step,
@@ -29,11 +24,12 @@ impl LinearRunner {
     }
 
     fn run_round<Target, Ret>(&mut self, round_size: usize, target: &mut Target) -> u64
-        where Target: FnMut() -> Ret {
-
+    where
+        Target: Runnable<Ret>,
+    {
         let now = Instant::now();
         for _ in 0..round_size {
-            black_box(target());
+            black_box(target.body());
         }
         let dur = now.elapsed();
 
@@ -43,8 +39,9 @@ impl LinearRunner {
 
 impl Runner<Round> for LinearRunner {
     fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample<Round>
-        where Target: FnMut() -> Ret {
-
+    where
+        Target: Runnable<Ret>,
+    {
         let mut data = Vec::with_capacity(self.sample_size);
 
         let mut round_size = self.round_size_start;

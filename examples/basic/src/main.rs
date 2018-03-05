@@ -3,7 +3,7 @@ extern crate liar;
 
 use liar::black_box;
 use liar::bencher::Bencher;
-use liar::runner::Runner;
+use liar::runner::Runnable;
 
 
 mod acker {
@@ -19,17 +19,11 @@ mod acker {
 }
 
 // Manual benchmark definition.
-fn nop<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
-    b.run(|| {});
+struct Nop;
+
+impl Runnable<()> for Nop {
+    fn body(&mut self) {}
 }
-
-// Benchmark definition with macro, allowing custom setup.
-bench!(nop_black_box, b, {
-    let m = 3;
-    let n = 2;
-
-    b.run(|| (black_box(m), black_box(n)));
-});
 
 // Succinct benchmark definition when no custom setup is needed.
 bench!(ack, {
@@ -48,7 +42,8 @@ fn main() {
     let r = fixed::FixedRunner::new(fixed::DEFAULT_ROUND_SIZE, fixed::DEFAULT_SAMPLE_SIZE);
     let mut b = Bencher::new(r);
 
-    add_bench!(b, nop);
+    add_bench!(b, Nop);
+    let nop_black_box = black_box(Nop);
     add_bench!(b, nop_black_box);
     add_bench!(b, ack);
     add_bench!(b, ack_black_box);

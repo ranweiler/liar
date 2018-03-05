@@ -1,6 +1,5 @@
 use black_box::black_box;
 
-
 pub struct Sample<'d> {
     pub name: &'static str,
     pub data: &'d [u64],
@@ -17,23 +16,26 @@ pub struct Runner<T> {
 
 impl<'a, T> Runner<T> {
     pub fn new(round_size: usize, timer: TimerFn<T>, diff: DiffFn<T>) -> Self {
-        Runner { round_size, timer, diff }
+        Runner {
+            round_size,
+            timer,
+            diff,
+        }
     }
 
-    pub fn run<Target, Ret>(
-        &mut self,
-        target: &mut Target,
-        samples: &mut [u64],
-    ) where Target: FnMut() -> Ret {
-
+    pub fn run<Target, Ret>(&mut self, target: &mut Target, samples: &mut [u64])
+    where
+        Target: FnMut() -> Ret,
+    {
         for i in 0..samples.len() {
             samples[i] = self.run_round(target);
         }
     }
 
     fn run_round<Target, Ret>(&mut self, target: &mut Target) -> u64
-        where Target: FnMut() -> Ret {
-
+    where
+        Target: FnMut() -> Ret,
+    {
         let start = (self.timer)();
 
         for _ in 0..self.round_size {
