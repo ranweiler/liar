@@ -1,11 +1,15 @@
 #![cfg_attr(asm, feature(asm))]
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[cfg(all(unix, feature = "std"))]
+extern crate libc;
+
 mod black_box;
 
 #[cfg(feature = "std")] pub mod bencher;
 #[cfg(feature = "std")] pub mod reporter;
 #[cfg(feature = "std")] pub mod runner;
+#[cfg(feature = "std")] pub mod timer;
 
 pub mod no_std;
 

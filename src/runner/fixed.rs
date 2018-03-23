@@ -1,8 +1,7 @@
-use std::time::Instant;
-
 use ::Sample;
-use runner::{Runner, to_ns};
 use black_box::black_box;
+use runner::Runner;
+use timer::{CPUTimer, Timer};
 
 
 pub const DEFAULT_ROUND_SIZE: usize = 10_000;
@@ -21,21 +20,24 @@ impl FixedRunner {
         }
     }
 
-    fn run_round<Target, Ret>(&mut self, round_size: usize, target: &mut Target) -> u64
+    fn run_round<Target, Ret>(&mut self, round_size: usize, target: &mut Target) -> f64
         where Target: FnMut() -> Ret {
 
-        let now = Instant::now();
+        let mut start = CPUTimer::new();
+        let mut end = CPUTimer::new();
+
+        start.mark();
         for _ in 0..round_size {
             black_box(target());
         }
-        let dur = now.elapsed();
+        end.mark();
 
-        to_ns(&dur) / (round_size as u64)
+        end.since(&start) / (round_size as f64)
     }
 }
 
-impl Runner<u64> for FixedRunner {
-    fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample<u64>
+impl Runner<f64> for FixedRunner {
+    fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample<f64>
         where Target: FnMut() -> Ret {
 
         let mut data = Vec::with_capacity(self.sample_size);

@@ -1,8 +1,7 @@
-use std::time::Instant;
-
 use ::Sample;
-use runner::{Round, Runner, to_ns};
 use black_box::black_box;
+use runner::{Round, Runner};
+use timer::{CPUTimer, Timer};
 
 
 pub const DEFAULT_ROUND_SIZE_START: usize = 1_000;
@@ -28,16 +27,19 @@ impl LinearRunner {
         }
     }
 
-    fn run_round<Target, Ret>(&mut self, round_size: usize, target: &mut Target) -> u64
+    fn run_round<Target, Ret>(&mut self, round_size: usize, target: &mut Target) -> f64
         where Target: FnMut() -> Ret {
 
-        let now = Instant::now();
+        let mut start = CPUTimer::new();
+        let mut end = CPUTimer::new();
+
+        start.mark();
         for _ in 0..round_size {
             black_box(target());
         }
-        let dur = now.elapsed();
+        end.mark();
 
-        to_ns(&dur)
+        end.since(&start)
     }
 }
 
