@@ -2,6 +2,7 @@ use libc;
 
 
 pub trait Timer {
+    fn new_timer() -> Self;
     fn mark(&mut self);
     fn since(&self, prev: &Self) -> f64;
 }
@@ -27,6 +28,10 @@ impl CPUTimer {
 
 
 impl Timer for CPUTimer {
+    fn new_timer() -> Self {
+        CPUTimer::new()
+    }
+
     fn mark(&mut self) {
         unsafe {
             libc::clock_gettime(libc::CLOCK_PROCESS_CPUTIME_ID, &mut self.ts);
