@@ -14,6 +14,9 @@ build = "build.rs"
 
 [dependencies]
 
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
 [build-dependencies]
 rustc_version = "0.2.1"
 

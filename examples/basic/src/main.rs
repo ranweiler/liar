@@ -44,8 +44,12 @@ fn main() {
     use liar::reporter::Reporter;
     use liar::reporter::line::LineReporter;
     use liar::runner::fixed;
+    use liar::timer::portable::PortableTimer;
 
-    let r = fixed::FixedRunner::new(fixed::DEFAULT_ROUND_SIZE, fixed::DEFAULT_SAMPLE_SIZE);
+    let r = fixed::FixedRunner::<PortableTimer>::new(
+        fixed::DEFAULT_ROUND_SIZE,
+        fixed::DEFAULT_SAMPLE_SIZE
+    );
     let mut b = Bencher::new(r);
 
     add_bench!(b, nop);
