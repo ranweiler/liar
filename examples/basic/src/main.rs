@@ -44,9 +44,9 @@ fn main() {
     use liar::reporter::Reporter;
     use liar::reporter::line::LineReporter;
     use liar::runner::fixed;
-    use liar::timer::posix::CPUTimer;
+    use liar::timer::portable::PortableTimer;
 
-    let r = fixed::FixedRunner::<CPUTimer>::new(
+    let r = fixed::FixedRunner::<PortableTimer>::new(
         fixed::DEFAULT_ROUND_SIZE,
         fixed::DEFAULT_SAMPLE_SIZE
     );
