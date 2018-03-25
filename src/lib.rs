@@ -3,9 +3,12 @@
 
 mod black_box;
 
-#[cfg(feature = "std")] pub mod bencher;
-#[cfg(feature = "std")] pub mod reporter;
-#[cfg(feature = "std")] pub mod runner;
+#[cfg(feature = "std")]
+pub mod bencher;
+#[cfg(feature = "std")]
+pub mod reporter;
+#[cfg(feature = "std")]
+pub mod runner;
 
 pub mod no_std;
 
@@ -20,13 +23,12 @@ pub struct Sample<T> {
 #[macro_export]
 macro_rules! bench {
     ($name:ident, $body:expr) => {
-        fn $name<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
-            b.run(|| $body);
-        }
-    };
-    ($name:ident, $b:ident, $body:expr) => {
-        fn $name<R: Runner<S>, S>($b: &mut Bencher<R, S>) {
-            $body
+        #[allow(non_camel_case_types)]
+        struct $name;
+        impl Runnable<()> for $name {
+            fn body(&mut self) {
+                 $body;
+            }
         }
     };
 }
@@ -34,6 +36,6 @@ macro_rules! bench {
 #[macro_export]
 macro_rules! add_bench {
     ($b:ident, $name:ident) => {
-        $b.bench(stringify!($name), &mut $name);
+        $b.bench(stringify!($name), $name);
     }
 }

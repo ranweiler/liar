@@ -3,12 +3,18 @@ pub mod linear;
 
 use std::time::Duration;
 
-use ::Sample;
+use Sample;
 
+pub trait Runnable<Ret> {
+    fn setup(&mut self) {}
+    fn teardown(&mut self) {}
+    fn body(&mut self) -> Ret;
+}
 
 pub trait Runner<S> {
     fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample<S>
-        where Target: FnMut() -> Ret;
+    where
+        Target: Runnable<Ret>;
 }
 
 pub struct Round {

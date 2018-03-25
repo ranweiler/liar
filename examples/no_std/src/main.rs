@@ -22,4 +22,4 @@ extern fn eh_personality() {}
 
 #[lang = "panic_fmt"]
 #[no_mangle]  // Fixes link error: `undefined reference to `rust_begin_unwind'`
-extern fn panic_fmt() -> ! { loop {} }
+pub extern fn panic_fmt() -> ! { loop {} }

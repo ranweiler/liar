@@ -1,6 +1,5 @@
-use ::Sample;
-use runner::Runner;
-
+use Sample;
+use runner::{Runnable, Runner};
 
 pub struct Bencher<R: Runner<S>, S> {
     name: Option<&'static str>,
@@ -17,18 +16,23 @@ impl<R: Runner<S>, S> Bencher<R, S> {
         }
     }
 
-    pub fn run<Target, Ret>(&mut self, mut target: Target)
-        where Target: FnMut() -> Ret {
-
+    pub fn run<Target, Ret>(&mut self, target: &mut Target)
+    where
+        Target: Runnable<Ret>,
+    {
         let name = self.name.unwrap();
-        let sample = self.runner.run(name, &mut target);
+        let sample = self.runner.run(name, target);
         self.samples.push(sample);
     }
 
-    pub fn bench<T>(&mut self, name: &'static str, target: &mut T)
-        where T: FnMut(&mut Bencher<R, S>) {
+    pub fn bench<T, Ret>(&mut self, name: &'static str, mut target: T)
+    where
+        T: Runnable<Ret>,
+    {
         self.name = Some(name);
-        target(self);
+        target.setup();
+        self.run(&mut target);
+        target.teardown();
     }
 
     pub fn samples(&self) -> &Vec<Sample<S>> {
