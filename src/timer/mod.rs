@@ -4,5 +4,7 @@ pub trait Timer {
     fn since(&self, prev: &Self) -> f64;
 }
 
+pub mod portable;
+
 #[cfg(all(unix, feature = "std"))]
 pub mod posix;
