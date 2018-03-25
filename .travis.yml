@@ -9,7 +9,7 @@ matrix:
     - rust: nightly
 script:
   - cargo build --verbose
-  - cd "${TRAVIS_BUILD_DIR}/examples/basic";
+  - cd "${TRAVIS_BUILD_DIR}/examples/std";
     cargo build --verbose;
   - if [[ "${TRAVIS_RUST_VERSION}" = "nightly" ]]; then
       cargo build --verbose --no-default-features;
