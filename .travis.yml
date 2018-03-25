@@ -4,6 +4,9 @@ rust:
   - stable
   - beta
   - nightly
+matrix:
+  allow_failures:
+    - rust: nightly
 script:
   - cargo build --verbose
   - cd "${TRAVIS_BUILD_DIR}/examples/basic";
