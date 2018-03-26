@@ -1,7 +1,9 @@
+#![no_std]
+
 #![feature(compiler_builtins_lib)]
 #![feature(lang_items)]
 #![feature(start)]
-#![no_std]
+
 extern crate compiler_builtins;
 extern crate libc;
 extern crate liar;
