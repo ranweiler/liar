@@ -15,11 +15,11 @@ build = "build.rs"
 [dependencies]
 
 [target.'cfg(unix)'.dependencies]
-libc = "0.2"
+libc = { version = "0.2", optional = true }
 
 [build-dependencies]
 rustc_version = "0.2.1"
 
 [features]
-default = ["std"]
+default = ["std", "libc"]
 std = []
