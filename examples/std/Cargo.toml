@@ -1,7 +1,8 @@
 [package]
-name = "basic"
+name = "liar-example-std"
 version = "0.1.0"
 authors = ["Joe Ranweiler <joe@lemma.co>"]
+publish = false
 
 [dependencies]
 liar = { path = "../.." }
