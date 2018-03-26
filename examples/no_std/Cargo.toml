@@ -2,6 +2,7 @@
 name = "liar-example-no_std"
 version = "0.1.0"
 authors = ["Joe Ranweiler <joe@lemma.co>"]
+publish = false
 
 [dependencies]
 libc = { version = "0.2.11", default-features = false }
