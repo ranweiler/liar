@@ -9,7 +9,7 @@ pub struct Bencher<R: Runner<S>, S> {
 }
 
 impl<R: Runner<S>, S> Bencher<R, S> {
-    pub fn new(runner: R) -> Self where {
+    pub fn new(runner: R) -> Self {
         Bencher {
             name: None,
             runner,
