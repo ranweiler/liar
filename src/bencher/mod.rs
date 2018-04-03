@@ -45,7 +45,7 @@ impl<R: Runner<S>, S> Bencher<R, S> {
     }
 
     /// Borrow a slice of samples recorded by this `Bencher`.
-    pub fn samples(&self) -> &Vec<Sample<S>> {
+    pub fn samples(&self) -> &[Sample<S>] {
         &self.samples
     }
 }
