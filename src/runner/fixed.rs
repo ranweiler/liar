@@ -1,3 +1,5 @@
+//! Measurement of average call time using fixed-size execution rounds.
+
 use std::marker::PhantomData;
 
 use ::Sample;
@@ -6,9 +8,14 @@ use runner::Runner;
 use timer::Timer;
 
 
+/// Default number of executions per round.
 pub const DEFAULT_ROUND_SIZE: usize = 10_000;
+
+/// Default number of rounds to run and record.
 pub const DEFAULT_SAMPLE_SIZE: usize = 100;
 
+/// Runs multiple rounds of executions of a target, recording the average target
+/// execution time in each round.
 pub struct FixedRunner<T: Timer> {
     round_size: usize,
     sample_size: usize,
@@ -16,6 +23,9 @@ pub struct FixedRunner<T: Timer> {
 }
 
 impl<T: Timer> FixedRunner<T> {
+    /// Construct a `FixedRunner` that will record a sample of its target with
+    /// `sample_size` timing measurements. Each measurement will be the average
+    /// time per call after executing the target `round_size` times.
     pub fn new(round_size: usize, sample_size: usize) -> Self {
         FixedRunner {
             round_size,

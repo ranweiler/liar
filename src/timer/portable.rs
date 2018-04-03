@@ -1,13 +1,17 @@
+//! A portable timer powered by `std::time`.
+
 use std::time::Instant;
 
 use timer::Timer;
 
 
+/// Wraps a `std::time::Instant`.
 pub struct PortableTimer {
     instant: Instant,
 }
 
 impl PortableTimer {
+    /// Construct a new timer, initialized with the current time.
     pub fn new() -> Self {
         let instant = Instant::now();
 

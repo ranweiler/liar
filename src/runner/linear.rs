@@ -1,3 +1,5 @@
+//! Measurement of call time using rounds with an linearly-increasing size.
+
 use std::marker::PhantomData;
 
 use ::Sample;
@@ -6,10 +8,17 @@ use runner::{Round, Runner};
 use timer::Timer;
 
 
+/// Default number of executions in first round.
 pub const DEFAULT_ROUND_SIZE_START: usize = 1_000;
+
+/// Default increase in round size between rounds.
 pub const DEFAULT_ROUND_SIZE_STEP: usize = 100;
+
+/// Defualt total number of rounds to record.
 pub const DEFAULT_SAMPLE_SIZE: usize = 100;
 
+/// Run a target in linearly-increasing round sizes. These can then be analyzed
+/// with, for example, linear regression.
 pub struct LinearRunner<T: Timer> {
     round_size_start: usize,
     round_size_step: usize,
@@ -18,6 +27,10 @@ pub struct LinearRunner<T: Timer> {
 }
 
 impl<T: Timer> LinearRunner<T> {
+    /// Construct a `LinearRunner`, which records a total of `sample_size`
+    /// rounds. The first round records the timing of `round_size_start`
+    /// executions of the target. Each subsequent round inclues an additional
+    /// `round_size_step` executions.
     pub fn new(
         round_size_start: usize,
         round_size_step: usize,

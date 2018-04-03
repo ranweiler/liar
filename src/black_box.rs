@@ -11,28 +11,27 @@
 // crate, which is port of `libtest` to stable Rust. Both are
 // dual-licensed, and in each case we incorporate the relevant code
 // using the MIT License option.
+//! A function that is opaque to the optimizer, to allow benchmarks to
+//! pretend to use outputs to assist in avoiding dead-code elimination.
 
 
-/// A function that is opaque to the optimizer, to allow benchmarks to
-/// pretend to use outputs to assist in avoiding dead-code elimination.
-///
-/// This function is a no-op, and the `asm!` implementation does not
-/// even read from `x`.
+/// Mark a value as used to prevent it from being optimized away.
 #[cfg(asm)]
 pub fn black_box<T>(x: T) -> T {
-    // We need to "use" the argument in some way LLVM can't
-    // introspect.
+    // "Use" the argument in some way that the optimizer can't inspect.
     unsafe { asm!("" : : "r"(&x)) }
     x
 }
 
 #[cfg(not(asm))]
 #[inline(never)]
+/// Mark a value as used to prevent it from being optimized away.
 pub fn black_box<T>(x: T) -> T {
     use std::mem;
     use std::ptr;
 
     unsafe {
+        // Use a more expensive method when inline asm is unavailable.
         let ret = ptr::read_volatile(&x);
         mem::forget(x);
         ret

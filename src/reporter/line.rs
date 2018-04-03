@@ -1,3 +1,5 @@
+//! Line-oriented reporter amenable to text processing tools.
+
 use std::fmt::Debug;
 
 use ::Sample;
@@ -5,12 +7,15 @@ use reporter::Reporter;
 use runner::Round;
 
 
+/// Reporter that outputs data as delimited text, with optional header.
 pub struct LineReporter {
     delim: &'static str,
     header: bool,
 }
 
 impl LineReporter {
+    /// Report results on lines, with columnns delimited by `delim`. If `header`
+    /// is `true`, include a header line to label columns.
     pub fn new(delim: &'static str, header: bool) -> Self {
         LineReporter { delim, header }
     }

@@ -1,13 +1,17 @@
+//! High-resolution timers using POSIX-only interfaces.
+
 use libc;
 
 use timer::Timer;
 
 
+/// Measures process CPU time.
 pub struct CPUTimer {
     ts: libc::timespec,
 }
 
 impl CPUTimer {
+    /// Construct a new timer.
     pub fn new() -> Self {
         let ts = libc::timespec {
             tv_sec: 0,
