@@ -11,6 +11,7 @@ extern crate libc;
 mod black_box;
 
 #[cfg(feature = "std")] pub mod bencher;
+#[cfg(feature = "std")] pub mod benchmark;
 #[cfg(feature = "std")] pub mod reporter;
 #[cfg(feature = "std")] pub mod runner;
 #[cfg(feature = "std")] pub mod timer;
@@ -24,7 +25,7 @@ pub use self::black_box::black_box;
 #[cfg(feature = "std")]
 pub struct Sample<T> {
     /// Name of the benchmark.
-    pub name: &'static str,
+    pub name: String,
 
     /// Recorded data.
     pub data: Vec<T>,
@@ -32,21 +33,31 @@ pub struct Sample<T> {
 
 #[macro_export]
 macro_rules! bench {
-    ($name:ident, $body:expr) => {
-        fn $name<R: Runner<S>, S>(b: &mut Bencher<R, S>) {
-            b.run(|| $body);
-        }
-    };
-    ($name:ident, $b:ident, $body:expr) => {
-        fn $name<R: Runner<S>, S>($b: &mut Bencher<R, S>) {
-            $body
+    ($name: ident, $body: expr) => {
+        #[allow(non_camel_case_types)]
+        struct $name;
+
+        impl Benchmark<()> for $name {
+            fn name(&self) -> String {
+                stringify!($name).to_string()
+            }
+
+            fn setup(&mut self) {}
+
+            fn target(&mut self) {
+                black_box({
+                    $body
+                });
+            }
+
+            fn teardown(&mut self) {}
         }
     };
 }
 
 #[macro_export]
-macro_rules! add_bench {
+macro_rules! run_bench {
     ($b:ident, $name:ident) => {
-        $b.bench(stringify!($name), &mut $name);
+        $b.run(&mut $name {});
     }
 }

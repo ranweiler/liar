@@ -3,6 +3,7 @@
 use std::marker::PhantomData;
 
 use ::Sample;
+use benchmark::Benchmark;
 use black_box::black_box;
 use runner::Runner;
 use timer::Timer;
@@ -34,15 +35,16 @@ impl<T: Timer> FixedRunner<T> {
         }
     }
 
-    fn run_round<Target, Ret>(&mut self, round_size: usize, target: &mut Target) -> f64
-        where Target: FnMut() -> Ret {
-
+    fn run_round<B, Ret>(&mut self, round_size: usize, bench: &mut B) -> f64
+    where
+        B: Benchmark<Ret>,
+    {
         let mut start = T::new_timer();
         let mut end = T::new_timer();
 
         start.mark();
         for _ in 0..round_size {
-            black_box(target());
+            black_box(bench.target());
         }
         end.mark();
 
@@ -51,16 +53,18 @@ impl<T: Timer> FixedRunner<T> {
 }
 
 impl<T: Timer> Runner<f64> for FixedRunner<T> {
-    fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample<f64>
-        where Target: FnMut() -> Ret {
+    fn run<B, Ret>(&mut self, bench: &mut B) -> Sample<f64>
+    where
+        B: Benchmark<Ret>,
+    {
 
         let mut data = Vec::with_capacity(self.sample_size);
 
         let round_size = self.round_size;  // For borrowck.
         for _ in 0..self.sample_size {
-            data.push(self.run_round(round_size, target))
+            data.push(self.run_round(round_size, bench))
         }
 
-        Sample { name, data }
+        Sample { name: bench.name(), data }
     }
 }
