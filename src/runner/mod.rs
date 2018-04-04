@@ -1,5 +1,7 @@
 //! Strategies for running benchmarks.
 
+use benchmark::Benchmark;
+
 pub mod fixed;
 pub mod linear;
 
@@ -10,8 +12,9 @@ use ::Sample;
 pub trait Runner<S> {
     /// Runs and measures a target function according to the implementor's
     /// strategy, recording a sample of timing measurements.
-    fn run<Target, Ret>(&mut self, name: &'static str, target: &mut Target) -> Sample<S>
-        where Target: FnMut() -> Ret;
+    fn run<B, Ret>(&mut self, bench: &mut B) -> Sample<S>
+    where
+        B: Benchmark<Ret>;
 }
 
 /// A series of sequential executions of a benchmark target.

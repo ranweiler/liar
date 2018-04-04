@@ -45,7 +45,7 @@ impl Reporter<Round> for LineReporter {
 
         for s in samples {
             for d in &s.data {
-                let l = [s.name, &d.ns.to_string(), &d.size.to_string()];
+                let l = [s.name.clone(), d.ns.to_string(), d.size.to_string()];
                 println!("{}", l.join(self.delim));
             }
         }
